@@ -32,5 +32,10 @@ WORKFLOW_help() {
     Print
     PrintUsage $target
     Print
+    Print "Available commands:
+    $(
+        find "$WORKFLOW_DIR" -mindepth 1 -maxdepth 1 -type d -printf '\t%f\n'
+    )"
+    Print
 }
 
