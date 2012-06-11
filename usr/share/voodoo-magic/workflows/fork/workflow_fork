@@ -35,7 +35,6 @@ WORKFLOW_fork() {
 
     # the command line argument NAME corresponds to the variable $program
     program="$1"
-
     [[ -n "$program" ]]
     StopIfError "No name specified"
 
@@ -49,6 +48,11 @@ WORKFLOW_fork() {
         StopIfError "Target directory exists and is not empty"
     fi
 
+    # bail out if $BASEDIR is / - this leads to recursion!
+    [[ ! "$BASEDIR" == '/' ]]
+    StopIfError "Basedir not allowed: $BASEDIR == /"
+
+    # mode-select - either regular or git mode
     if $CLONE_GIT; then
         Source "$WORKFLOW_DIR/$WORKFLOW/workflow_git"
     else
