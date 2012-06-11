@@ -17,8 +17,6 @@
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 WORKFLOW_fork() {
-    SourceStage "$WORKFLOW_DIR/$WORKFLOW/functions"
-
     if $CLONE_GIT; then
         Source "$WORKFLOW_DIR/$WORKFLOW/workflow_git"
     else
