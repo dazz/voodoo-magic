@@ -1,0 +1,14 @@
+The FORK workflow allows you to fork this project into a new project, e.g. copy
+the entire framework code-base to a new directory root.
+
+Two modes of execution are available through CLONE_GIT=[true|false]:
+
+ Set:         CLONE_GIT=false (default)
+ - REGULAR  - Copy plain code-base to new directory root and replace all vendor
+              information in pathnames, as well as in-line.
+
+ Set:         CLONE_GIT=true
+ - GIT      - Additionally to REGULAR MODE, the GIT MODE will copy the .git
+              folder and all recursively found .gitignore files. Before
+              installing to target-diretory, it will commit all changes made
+              due to forking.

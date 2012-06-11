@@ -16,24 +16,21 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# if workflow is passed as an argument, echo description of workflow
-if [[ -n $1 ]]; then
-    Source "$SHARE_DIR/workflows/$1/workflow_$1"
-    local description=WORKFLOW_$1_DESCRIPTION
-    local usage=WORKFLOW_$1_USAGE
-    echo "Help for $1:"
-    echo "${!description}"
-    echo
-    echo "${!usage}"
-    echo
-else
-    echo "$usage_information"
-    echo "
-    Available commands:
-    $(
-        find "$SHARE_DIR/workflows/" -mindepth 1 -maxdepth 1 \
-            -type d -printf '\t%f\n'
-    )
-    "
-fi
+PrintDescription() {
+    local description="$1/description"
+    if [[ -f "$description" ]]; then
+        cat "$description"
+    else
+        Print "No description found: $1"
+    fi
+}
+
+PrintUsage() {
+    local usage="$1/usage"
+    if [[ -f "$usage" ]]; then
+        cat "$usage"
+    else
+        Print "No usage information found: $1"
+    fi
+}
 

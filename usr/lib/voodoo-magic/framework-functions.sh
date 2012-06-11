@@ -24,18 +24,16 @@ Source() {
     # skip empty
     [[ -z "$1" ]] && return
     [[ -d "$1" ]] && Debug "$1 is a directory, cannot source" && return
-    local failed=false
 
     if [[ -s "$1" ]]; then
         local relname="${1##$SHARE_DIR/}"
         if $SIMULATE && expr "$1" : "$SHARE_DIR" >&8; then
             # simulate sourcing the scripts in $SHARE_DIR
             LogPrint "Source $relname"
-            grep functions <(echo $1) >&8 || source "$1"
         else
             Log "Including ${1##$SHARE_DIR/}"
             $DEBUGSCRIPTS && set -x
-            source "$1" ${ARGS[@]}
+            source "$1"
             $DEBUGSCRIPTS && set +x
         fi
     else
@@ -60,26 +58,24 @@ SourceStage() {
 }
 
 WorkflowStage() {
-    local stagedir="$SHARE_DIR/workflows/$WORKFLOW/functions"
-    local workflow="$SHARE_DIR/workflows/$WORKFLOW/workflow_$WORKFLOW"
-
     # source the workflow config
     Source "$WORKFLOW_DIR/$WORKFLOW/conf/$WORKFLOW.conf"
     Source "$CONF_DIR/$WORKFLOW.conf"
 
-    # stage the workflow
-    LogPrint "Staging workflow: $WORKFLOW"
-    Source "$workflow"
+    # stage workflow helper functions
+    Log "Staging functions for: $WORKFLOW"
+    SourceStage "$WORKFLOW_DIR/$WORKFLOW/functions"
+    LogIfError "WARNING: Functions for $WORKFLOW either broken or not present"
 
-    # QA
-    [[ -n "WORKFLOW_${WORKFLOW}_DESCRIPTION" ]]
-    LogPrintIfError "QA: WORKFLOW_${WORKFLOW}_DESCRIPTION not set."
-    [[ -n "WORKFLOW_${WORKFLOW}_USAGE" ]]
-    LogPrintIfError "QA: WORKFLOW_${WORKFLOW}_USAGE not set."
-    
+    # stage the workflow
+    Log "Staging workflow: $WORKFLOW"
+    Source "$WORKFLOW_DIR/$WORKFLOW/workflow_$WORKFLOW"
+
+    $SIMULATE && return
+
     # execute workflow
     has_binary WORKFLOW_$WORKFLOW
     StopIfError "Can not find function: WORKFLOW_$WORKFLOW"
-    WORKFLOW_$WORKFLOW
+    WORKFLOW_$WORKFLOW "${ARGS[@]}"
 }
 
