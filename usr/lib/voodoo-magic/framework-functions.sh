@@ -71,6 +71,8 @@ WorkflowStage() {
     Log "Staging workflow: $WORKFLOW"
     Source "$WORKFLOW_DIR/$WORKFLOW/workflow_$WORKFLOW"
 
+    $SIMULATE && return
+
     # execute workflow
     has_binary WORKFLOW_$WORKFLOW
     StopIfError "Can not find function: WORKFLOW_$WORKFLOW"
