@@ -24,7 +24,12 @@ WORKFLOW_help_USAGE="Usage: $PROGRAM help [ COMMAND ]"
 LOCKLESS_WORKFLOWS=( ${LOCKLESS_WORKFLOWS[@]} 'help' )
 
 WORKFLOW_help() {
-    target="${1:-$WORKFLOW}"
+    local target="${1:-$WORKFLOW}"
+    if [[ "$target" == 'help' ]]; then
+        target="$DOC_DIR"
+    else
+        target="$WORKFLOW_DIR/$target/doc"
+    fi
     Print
     PrintDescription $target
     Print

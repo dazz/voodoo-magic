@@ -17,7 +17,7 @@
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 PrintDescription() {
-    local description="$WORKFLOW_DIR/$1/doc/description"
+    local description="$1/description"
     if [[ -f "$description" ]]; then
         cat "$description"
     else
@@ -26,7 +26,7 @@ PrintDescription() {
 }
 
 PrintUsage() {
-    local usage="$WORKFLOW_DIR/$1/doc/usage"
+    local usage="$1/usage"
     if [[ -f "$usage" ]]; then
         cat "$usage"
     else
