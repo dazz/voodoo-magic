@@ -24,7 +24,7 @@ WORKFLOW_fork() {
     while true; do
         case "$1" in
             (--target) target=$2; shift;;
-            (--productp) product=$2; shift;;
+            (--product) product=$2; shift;;
             (-x) EXCLUDE_WORKFLOWS+="$2"; shift;;
             (--) shift; break;;
             (-*) Error "Unrecognized option '$option' in workflow: $WORKFLOW";;
