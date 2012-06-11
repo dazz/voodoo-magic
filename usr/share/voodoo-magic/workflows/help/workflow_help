@@ -24,10 +24,11 @@ WORKFLOW_help_USAGE="Usage: $PROGRAM help [ COMMAND ]"
 LOCKLESS_WORKFLOWS=( ${LOCKLESS_WORKFLOWS[@]} 'help' )
 
 WORKFLOW_help() {
-    SourceStage "$WORKFLOW_DIR/$WORKFLOW/functions"
-
     target="${1:-$WORKFLOW}"
+    Print
     PrintDescription $target
+    Print
     PrintUsage $target
+    Print
 }
 
