@@ -74,6 +74,7 @@ WorkflowStage() {
     $SIMULATE && return
 
     # execute workflow
+    Log "Executing workflow: $WORKFLOW"
     has_binary WORKFLOW_$WORKFLOW
     StopIfError "Can not find function: WORKFLOW_$WORKFLOW"
     WORKFLOW_$WORKFLOW "${ARGS[@]}"
