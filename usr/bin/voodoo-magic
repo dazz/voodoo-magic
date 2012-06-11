@@ -15,25 +15,23 @@
 #    You should have received a copy of the GNU General Public License along
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
-# Authors:
-# @@@AUTHORS@@@
 
 # Product and versioning information
 PRODUCT="Voodoo-Magic"
 PROGRAM="${0##*/}"
-BASEDIR="$(readlink -f ${0%/*/*/*})"
 VERSION="0.0.1"
 RELEASE_DATE="2012-06-08"
 
 CMD_OPTS=( "$@" )
 STARTTIME=$SECONDS
 
+BASEDIR="$(readlink -f ${0%/*/*/*})"
 CONF_DIR="$BASEDIR/etc/$PROGRAM"
 LIB_DIR="$BASEDIR/usr/lib/$PROGRAM"
 SHARE_DIR="$BASEDIR/usr/share/$PROGRAM"
 LOG_DIR="$BASEDIR/var/log/$PROGRAM"
 SPOOL_DIR="$BASEDIR/var/spool/$PROGRAM"
+DOC_DIR="$BASEDIR/usr/share/doc/$PROGRAM"
 
 DEBUG=false
 DEBUGSCRIPTS=false
