@@ -60,8 +60,5 @@ GitCommit() {
     git commit -m "forking $PROGRAM to $program" >&2
     StopIfError "Can not commit to git" >&2
 
-    # tag fork as version 0.0.1
-    git tag -a "0.0.1" -m "Forking $PRODUCT-$VERSION to $product-0.0.1" >&2
-
     popd >&8
 }
