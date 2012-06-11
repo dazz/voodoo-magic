@@ -16,9 +16,6 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-WORKFLOW_help_DESCRIPTION="Display help and usage information"
-WORKFLOW_help_USAGE="Usage: $PROGRAM help [ COMMAND ]"
-
 # this is a lockless workflow, meaning it can run even if another instance
 # of this script is already running.
 LOCKLESS_WORKFLOWS=( ${LOCKLESS_WORKFLOWS[@]} 'help' )
