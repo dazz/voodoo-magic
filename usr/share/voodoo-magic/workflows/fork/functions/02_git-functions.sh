@@ -21,13 +21,18 @@ CopyGitRelatedContent() {
 
     pushd "$BASEDIR" >&8
 
+    # bail out if BASEDIR is not a repository
     [[ -d .git ]]
     StopIfError "Can not migrate .git/, folder doesn't exist."
     
+    # copy local repository to workspace
     cp -a .git "$workdir"/
 
+    # copy .gitignore files to workspace and fix contents
     for f in $(find . -name .gitignore | sed 's#\./##'); do
-        cp "$f" "$workdir/$(dirname "$f")/"
+        cp "$f" "$workdir/$(
+            ReplaceProgramNameInPath "$(dirname "$f")"
+        )/"
     done
 
     popd >&8
@@ -36,16 +41,12 @@ CopyGitRelatedContent() {
 FixGitIgnoreFiles() {
     LogPrint "Fixing .gitignore files..."
 
-    pushd "$BASEDIR" >&8
+    pushd "$workdir" >&8
 
-    IFS=$'\n' gitignorefiles=( "$(
-        find . -name .gitignore | sed 's#\./##'
-    )" )
-    
-    for f in "${gitignorefiles[@]}"; do
+    for f in $(find . -name .gitignore | sed 's#\./##'); do
         ReplaceVendorInformationInFile "$f"
     done
-
+    
     popd >&8
 }
 

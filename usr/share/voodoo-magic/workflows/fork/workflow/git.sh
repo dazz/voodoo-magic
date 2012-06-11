@@ -23,5 +23,5 @@ CopyGitRelatedContent
 FixGitIgnoreFiles
 GitCommit
 
-#InstallWorkSpaceIntoTarget
+InstallWorkSpaceIntoTarget
 
