@@ -21,8 +21,13 @@ WORKFLOW_help_USAGE="Usage: $PROGRAM help [ COMMAND ]"
 
 # this is a lockless workflow, meaning it can run even if another instance
 # of this script is already running.
-LOCKLESS_WORKFLOWS=( ${LOCKLESS_WORKFLOWS[@]} help )
+LOCKLESS_WORKFLOWS=( ${LOCKLESS_WORKFLOWS[@]} 'help' )
 
 WORKFLOW_help() {
     SourceStage "$WORKFLOW_DIR/$WORKFLOW/functions"
+
+    target="${1:-$WORKFLOW}"
+    PrintDescription $target
+    PrintUsage $target
 }
+
