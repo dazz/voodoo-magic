@@ -17,6 +17,38 @@
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 WORKFLOW_fork() {
+    OPTS="$(getopt -n $PROGRAM -o "x:" -l "target:,product:" -- "$@")"
+    StopIfError "Unknown argument in workflow: $WORKFLOW"
+
+    eval set -- "$OPTS"
+    while true; do
+        case "$1" in
+            (--target) target=$2; shift;;
+            (--productp) product=$2; shift;;
+            (-x) EXCLUDE_WORKFLOWS+="$2"; shift;;
+            (--) shift; break;;
+            (-*) Error "Unrecognized option '$option' in workflow: $WORKFLOW";;
+            (*) break;;
+        esac
+        shift
+    done
+
+    # the command line argument NAME corresponds to the variable $program
+    program="$1"
+
+    [[ -n "$program" ]]
+    StopIfError "No name specified"
+
+    # set some default behaviours
+    target="${target:-$program}"
+    product="${product:-$program}"
+
+    # bail out if targetdir exists and is not empty
+    if [[ -d "$target" ]]; then
+        ! ls -A "$target"/* >&8
+        StopIfError "Target directory exists and is not empty"
+    fi
+
     if $CLONE_GIT; then
         Source "$WORKFLOW_DIR/$WORKFLOW/workflow_git"
     else
