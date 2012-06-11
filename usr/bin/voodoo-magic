@@ -1,0 +1,156 @@
+#!/bin/bash
+#
+# Voodoo-Magic
+#
+#    Voodoo-Magic is free software; you can redistribute it and/or modify it
+#    under the terms of the GNU General Public License as published by the Free
+#    Software Foundation; either version 2 of the License, or (at your option)
+#    any later version.
+#
+#    Voodoo-Magic is distributed in the hope that it will be useful, but
+#    WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+#    or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+#    for more details.
+#
+#    You should have received a copy of the GNU General Public License along
+#    with Voodoo-Magic; if not, write to the Free Software Foundation,
+#    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Authors:
+# @@@AUTHORS@@@
+
+# Product and versioning information
+PRODUCT="Voodoo-Magic"
+PROGRAM="${0##*/}"
+BASEDIR="$(readlink -f ${0%/*/*/*})"
+VERSION="0.0.1"
+RELEASE_DATE="2012-06-08"
+
+CMD_OPTS=( "$@" )
+STARTTIME=$SECONDS
+
+CONF_DIR="$BASEDIR/etc/$PROGRAM"
+LIB_DIR="$BASEDIR/usr/lib/$PROGRAM"
+SHARE_DIR="$BASEDIR/usr/share/$PROGRAM"
+LOG_DIR="$BASEDIR/var/log/$PROGRAM"
+SPOOL_DIR="$BASEDIR/var/spool/$PROGRAM"
+
+DEBUG=false
+DEBUGSCRIPTS=false
+SIMULATE=false
+
+EXIT_CODE=0
+
+OPTS="$(getopt -n $PROGRAM -o "hdDvVs" -l "help,version" -- "$@")"
+if (( $? != 0 )); then
+    echo "Try \`$PROGRAM --help\` for more information."
+    exit 1
+fi
+
+eval set -- "$OPTS"
+while true; do
+    case $1 in
+        (-h|--help) WORKFLOW="help";;
+        (-V|--version) echo -e "$PRODUCT $VERSION / $RELEASE_DATE"; exit 0;;
+        (-d) DEBUG=true;;
+        (-D) DEBUGSCRIPTS=true;;
+        (-v) VERBOSE=true;;
+        (-s) SIMULATE=true; VERBOSE=true; DEBUG=true;;
+        (--) shift; break;;
+        (-*)
+            echo "$PROGNAME: unrecognized option '$option'"
+            echo "Try \`$PROGRAM --help' for more information."
+            exit 1
+            ;;
+        (*) break;;
+    esac
+    shift
+done
+
+# set workflow to first command line argument or to help/usage
+if [[ -z "$WORKFLOW" ]]; then
+    if [[ "$1" ]]; then
+        WORKFLOW=$1 ; shift
+    else
+        WORKFLOW="help"
+    fi
+fi
+
+# keep the remaining command line arguments to feed to the workflow
+ARGS=( "$@" )
+
+# Make sure we have the necessary paths (eg. in cron), /sbin will be the first path to search.
+for path in /usr/bin /bin /usr/sbin /sbin; do
+    case ":$PATH:" in
+        (*:"$path":*) ;;
+        (*) if [[ -d "$path" ]]; then PATH=$path:$PATH; fi ;;
+    esac
+done
+
+# require root privileges
+#if (( $(id --user) != 0 )); then
+#    echo "ERROR: $PRODUCT needs ROOT privileges!" >&2
+#    exit 1
+#fi
+
+# set some bash options
+shopt -s nullglob extglob
+hash -r
+
+# make sure that we use only english
+export LC_CTYPE=C LC_ALL=C LANG=C
+
+# source default config and then user config
+source "$SHARE_DIR/default.conf"
+source "$CONF_DIR/$PROGRAM.conf"
+
+# source all libraries
+for lib in "$LIB_DIR"/*.sh;do
+    source "$lib"
+done
+
+if ! has_binary pidof; then
+    echo "ERROR: Required program 'pidof' missing, please check your PATH" >&2
+    exit 1
+fi
+
+# do not run if another instance is running. pidof -x will always report at least $$
+SCRIPT_FILE="$(readlink -f $(get_path "$0" || echo "$0"))"
+PID=$(pidof -x -o %PPID "./usr/bin/voodoo-magic") || true
+if IsInArray "$WORKFLOW" "${LOCKLESS_WORKFLOWS[@]}"; then
+    LOGFILE="$LOGFILE.lockless"
+elif [[ "$PID" ]] ; then
+    echo "ERROR: $SCRIPT_FILE is already running, not starting again" >&2
+    exit 1
+fi
+
+# keep old log file
+if [[ -r "$LOGFILE" ]]; then
+    mv -f "$LOGFILE" "$LOGFILE".old 2>&8
+fi
+exec 2>"$LOGFILE" || echo "ERROR: Could not create $LOGFILE" >&2
+
+if ! IsInArray "$WORKFLOW" "${LOCKLESS_WORKFLOWS[@]}"; then
+    LogPrint "$PRODUCT $VERSION / $RELEASE_DATE starting up."
+    $SIMULATE && LogPrint "- SIMULATION MODE -"
+    Log "Command line options: $0 ${CMD_OPTS[@]}"
+fi
+
+# is this a verbose workflow?
+for workflow in "${ALWAYS_VERBOSE[@]}"; do
+    if [[ $WORKFLOW == $workflow ]]; then
+        VERBOSE=true
+        break
+    fi
+done
+
+v=""
+verbose=""
+# enable progress subsystem only in verbose mode, set some stuff that others can use
+if [[ "$VERBOSE" ]]; then
+    source $LIB_DIR/progresssubsystem.nosh
+    v="-v"
+    verbose="--verbose"
+fi
+
+WorkflowStage "$WORKFLOW"
