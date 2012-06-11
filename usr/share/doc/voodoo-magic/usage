@@ -6,4 +6,4 @@ Available options:
     -v              - Be verbose
     -d              - Debug mode - write debug messages to logfile
     -D              - Debugscript mode - Run workflow with set -x
-    -s              - Simulation mode - Only print files that would be sources
+    -s              - Simulation mode - Only print files that would be sourced
