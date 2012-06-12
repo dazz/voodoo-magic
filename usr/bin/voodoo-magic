@@ -151,4 +151,4 @@ if [[ "$VERBOSE" ]]; then
     verbose="--verbose"
 fi
 
-WorkflowStage "$WORKFLOW"
+StageWorkflow "$WORKFLOW"

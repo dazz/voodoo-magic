@@ -57,7 +57,7 @@ SourceStage() {
     done
 }
 
-WorkflowStage() {
+StageWorkflow() {
     # source the workflow config
     Source "$WORKFLOW_DIR/$WORKFLOW/conf/$WORKFLOW.conf"
     Source "$CONF_DIR/$WORKFLOW.conf"
