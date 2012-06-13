@@ -1,16 +1,18 @@
-Vodoo-Magic is a shell-script framework written in Bash.
-
-It aims on providing a flexible and extensible code-base for any and every kind
-of quirky voodoo-magic shell-script fantasy of your dreams. The actual payload
-of the script logic is broken down into `workflows`, while the framework itself
-takes care of all sort of peripheral logic, such as logging, parsing of
-parameters, intelligent IO-redirection, error- and crash-management, as well as
-staging the workflow environment and cleaning up afterwards.
+Vodoo-Magic is a shell-script framework written in Bash. It aims on providing a
+flexible and extensible code-base for any and every kind of quirky voodoo-magic
+shell-script fantasy of your needs.
 
 Voodoo-Magic has adepted many design concepts from Rear (Relax and Recover) to
 achieve a very high level of flexibility when it comes down to one of those
 situations where you could rly rly use a niffty Bash script, but then realize
-the overhead in taking care of all the business- and error-logic around the
-actual 30 lines of payload code.
+the overhead in taking care of all the business- and error logic surrounding
+the actual script code.
+
+The approach of the framework is easily explained. It distinguishes peripheral
+logic from actual payload code and provides an abstraction layer called
+workflows for you to write this actual script code in. The framework surrounding
+it provides all sorts of useful tools and helpers to achieve your goal with
+minimum time and effort. Your workflow is then accessible as shell parameter
+within the framework, e.g. `voodoo-magic <workflow>`.
 
 Happy hacking.
