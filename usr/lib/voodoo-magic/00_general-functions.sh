@@ -22,9 +22,11 @@ AddExitTask() {
     EXIT_TASKS=( "$*" "${EXIT_TASKS[@]}" )
     Debug "Added $* as exit task"
 }
+
 QuietAddExitTask() {
     EXIT_TASKS=( "$*" "${EXIT_TASKS[@]}" )
 }
+
 RemoveExitTask() {
     local removed=false
     for (( c=0 ; c<${#EXIT_TASKS[@]} ; c++ )); do
@@ -37,6 +39,7 @@ RemoveExitTask() {
     $removed
     StopIfError "Couldn't remove exit task $*."
 }
+
 DoExitTasks(){
     Log "Running exit tasks."
     for task in "${EXIT_TASKS[@]}"; do
@@ -44,6 +47,7 @@ DoExitTasks(){
         eval "$task"
     done
 }
+
 builtin trap DoExitTasks 0  # trap for exit tasks
 exec 7>&1                   # duplicate STD_IN to fd7 to use with Print
 QuietAddExitTask "exec 7>&-"
