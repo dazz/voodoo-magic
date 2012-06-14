@@ -65,7 +65,6 @@ StageWorkflow() {
     # stage workflow helper functions
     Log "Staging functions for: $WORKFLOW"
     SourceStage "$WORKFLOW_DIR/$WORKFLOW/functions"
-    LogIfError "WARNING: Functions for $WORKFLOW either broken or not present"
 
     # stage the workflow
     Log "Staging workflow: $WORKFLOW"
