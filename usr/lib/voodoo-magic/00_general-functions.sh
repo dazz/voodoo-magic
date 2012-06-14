@@ -33,13 +33,9 @@ RemoveExitTask() {
             removed=true
             Debug "Removed $* from the list of exit tasks"
         fi
-    done
-    $removed || CatchErrorAndLog "Couldn't remove exit task $* - Not found in:
-            $(
-                for task in "${EXIT_TASKS[@]}"; do
-                    echo "$task"
-                done
-            )"
+    done   
+    $removed
+    StopIfError "Couldn't remove exit task $*."
 }
 DoExitTasks(){
     Log "Running exit tasks."
