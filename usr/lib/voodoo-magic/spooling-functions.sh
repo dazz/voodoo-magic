@@ -16,7 +16,7 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-AddSpoolFile() {
+NewSpoolFile() {
     local tmpfile="$(mktemp --tmpdir="$SPOOL_DIR" "$PROGRAM".XXXXXX)"
     AddExitTask "rm \"$tmpfile\""
     echo $tmpfile
@@ -30,7 +30,7 @@ RemoveSpoolFile() {
     StopIfError "Can not remove spoolfile: $tmpfile"
 }
 
-AddFiFo() {
+NewFiFo() {
     local tmpfile="$(mktemp --tmpdir="$SPOOL_DIR" "$PROGRAM".fifo.XXXXXX)"
     local fifo="$(mkfifo "$tmpfile")"
     AddExitTask "rm \"$fifo\""
