@@ -75,25 +75,6 @@ get_path() {
         type -p $1 2>&8
 }
 
-# setup dummy progress subsystem as a default
-# not VERBOSE, Progress stuff replaced by dummy/noop
-exec 8>/dev/null # start ProgressPipe listening at fd 8
-QuietAddExitTask "exec 8>&-" # new method, close fd 8 at exit
-
-ProgressStart() {
-    : ;
-}
-ProgressStop() {
-    : ;
-}
-ProgressError() {
-    : ;
-}
-ProgressStep() {
-    : ;
-}
-
-ProgressInfo() {
-    : ;
-}
+exec 8>/dev/null
+QuietAddExitTask "exec 8>&-"
 
