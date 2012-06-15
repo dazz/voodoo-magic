@@ -48,8 +48,8 @@ DoExitTasks(){
     done
 }
 
-builtin trap DoExitTasks 0  # trap for exit tasks
-exec 7>&1                   # duplicate STD_IN to fd7 to use with Print
+builtin trap DoExitTasks INT TERM EXIT  # trap for exit tasks
+exec 7>&1                               # duplicate STD_IN to fd7 for Print()
 QuietAddExitTask "exec 7>&-"
 
 # USR1 is used to abort on errors. we store the PID of the master file, so an

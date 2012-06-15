@@ -76,6 +76,8 @@ StageWorkflow() {
     Log "Executing workflow: $WORKFLOW"
     has_binary WORKFLOW_$WORKFLOW
     StopIfError "Can not find function: WORKFLOW_$WORKFLOW"
+
+    $DEBUG && set -x
     WORKFLOW_$WORKFLOW "${ARGS[@]}"
 }
 
