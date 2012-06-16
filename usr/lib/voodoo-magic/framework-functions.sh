@@ -57,15 +57,22 @@ SourceStage() {
     done
 }
 
-WorkflowStage() {
+StageWorkflow() {
     # source the workflow config
     Source "$WORKFLOW_DIR/$WORKFLOW/conf/$WORKFLOW.conf"
     Source "$CONF_DIR/$WORKFLOW.conf"
 
     # stage workflow helper functions
-    Log "Staging functions for: $WORKFLOW"
-    SourceStage "$WORKFLOW_DIR/$WORKFLOW/functions"
-    LogIfError "WARNING: Functions for $WORKFLOW either broken or not present"
+    local workflow_functions="$WORKFLOW_DIR/$WORKFLOW/functions"
+    if [[ -d "$workflow_functions" ]]; then
+        Log "Staging functions from dir for workflow: $WORKFLOW"
+        SourceStage "$workflow_functions"
+    elif [[ -f "$workflow_functions" ]]; then
+        Log "Staging functions from dir for workflow: $WORKFLOW"
+        Source "$workflow_functions"
+    else
+        Log "No functions found for workflow: $WORKFLOW"
+    fi
 
     # stage the workflow
     Log "Staging workflow: $WORKFLOW"
@@ -77,6 +84,8 @@ WorkflowStage() {
     Log "Executing workflow: $WORKFLOW"
     has_binary WORKFLOW_$WORKFLOW
     StopIfError "Can not find function: WORKFLOW_$WORKFLOW"
+
+    $DEBUG && set -x
     WORKFLOW_$WORKFLOW "${ARGS[@]}"
 }
 

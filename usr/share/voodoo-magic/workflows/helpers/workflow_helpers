@@ -16,14 +16,11 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# some array functions
-
-# return wether $1 equals one of the remaining arguments
-IsInArray() {
-    local needle="$1"
-    while shift; do
-        [[ "$needle" == "$1" ]] && return 0
-    done
-    return 1
+WORKFLOW_helpers() {
+    if [[ -z "$1" ]]; then
+        ListHelpers
+    else
+        ShowHelper "$1"
+    fi
 }
 

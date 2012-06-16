@@ -22,9 +22,11 @@ AddExitTask() {
     EXIT_TASKS=( "$*" "${EXIT_TASKS[@]}" )
     Debug "Added $* as exit task"
 }
+
 QuietAddExitTask() {
     EXIT_TASKS=( "$*" "${EXIT_TASKS[@]}" )
 }
+
 RemoveExitTask() {
     local removed=false
     for (( c=0 ; c<${#EXIT_TASKS[@]} ; c++ )); do
@@ -33,14 +35,11 @@ RemoveExitTask() {
             removed=true
             Debug "Removed $* from the list of exit tasks"
         fi
-    done
-    $removed || CatchErrorAndLog "Couldn't remove exit task $* - Not found in:
-            $(
-                for task in "${EXIT_TASKS[@]}"; do
-                    echo "$task"
-                done
-            )"
+    done   
+    $removed
+    StopIfError "Couldn't remove exit task $*."
 }
+
 DoExitTasks(){
     Log "Running exit tasks."
     for task in "${EXIT_TASKS[@]}"; do
@@ -48,8 +47,9 @@ DoExitTasks(){
         eval "$task"
     done
 }
-builtin trap DoExitTasks 0  # trap for exit tasks
-exec 7>&1                   # duplicate STD_IN to fd7 to use with Print
+
+builtin trap DoExitTasks INT TERM EXIT  # trap for exit tasks
+exec 7>&1                               # duplicate STD_IN to fd7 for Print()
 QuietAddExitTask "exec 7>&-"
 
 # USR1 is used to abort on errors. we store the PID of the master file, so an
@@ -72,28 +72,9 @@ has_binary() {
 }
 
 get_path() {
-        type -p $1 2>&8
+    type -p $1 2>&8
 }
 
-# setup dummy progress subsystem as a default
-# not VERBOSE, Progress stuff replaced by dummy/noop
-exec 8>/dev/null # start ProgressPipe listening at fd 8
-QuietAddExitTask "exec 8>&-" # new method, close fd 8 at exit
-
-ProgressStart() {
-    : ;
-}
-ProgressStop() {
-    : ;
-}
-ProgressError() {
-    : ;
-}
-ProgressStep() {
-    : ;
-}
-
-ProgressInfo() {
-    : ;
-}
+exec 8>/dev/null
+QuietAddExitTask "exec 8>&-"
 

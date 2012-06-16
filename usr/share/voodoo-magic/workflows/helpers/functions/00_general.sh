@@ -16,14 +16,35 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# some array functions
+ListHelpers() {
+    echo
+    echo 'Available helpers:'
+    echo '=================='
+    egrep -ore '.*\(\) \{' "$LIB_DIR" |\
+        cut -d: -f2 |\
+        sed 's#^\([^(]\+\).*#\1#' |\
+        sed '/^[\t| ]/d' |\
+        egrep '^[A-Z]' |\
+        sort
+}
 
-# return wether $1 equals one of the remaining arguments
-IsInArray() {
-    local needle="$1"
-    while shift; do
-        [[ "$needle" == "$1" ]] && return 0
-    done
-    return 1
+ShowHelper() {
+    # ToDo: use sed to accomplish this
+    filename="$(egrep -ore "^$1\(\) \{" "$LIB_DIR" | cut -d: -f1)"
+    local output=false
+    echo $filename
+
+    if [[ -f "$filename" ]]; then
+        echo
+        while read line; do
+            if $output; then
+                echo "$line"
+                [[ "${line}" == "}" ]] && echo && return
+            elif [[ "$line" == "$1()"* ]]; then
+                output=true
+                echo "$line"
+            fi
+        done < "$filename"
+    fi
 }
 
