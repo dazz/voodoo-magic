@@ -63,8 +63,16 @@ StageWorkflow() {
     Source "$CONF_DIR/$WORKFLOW.conf"
 
     # stage workflow helper functions
-    Log "Staging functions for: $WORKFLOW"
-    SourceStage "$WORKFLOW_DIR/$WORKFLOW/functions"
+    local workflow_functions="$WORKFLOW_DIR/$WORKFLOW/functions"
+    if [[ -d "$workflow_functions" ]]; then
+        Log "Staging functions from dir for workflow: $WORKFLOW"
+        SourceStage "$workflow_functions"
+    elif [[ -f "$workflow_functions" ]]; then
+        Log "Staging functions from dir for workflow: $WORKFLOW"
+        Source "$workflow_functions"
+    else
+        Log "No functions found for workflow: $WORKFLOW"
+    fi
 
     # stage the workflow
     Log "Staging workflow: $WORKFLOW"
