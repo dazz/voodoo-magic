@@ -59,7 +59,12 @@ SourceStage() {
 
 StageWorkflow() {
     # source the workflow config
-    Source "$WORKFLOW_DIR/$WORKFLOW/conf/$WORKFLOW.conf"
+    WORKFLOW_CONFIG="$WORKFLOW_DIR/$WORKFLOW/conf/$WORKFLOW.conf"
+    if [[ -f "$WORKFLOW_CONFIG" ]]; then
+        Source "$WORKFLOW_CONFIG"
+    else
+        unset WORKFLOW_CONFIG
+    fi
     Source "$CONF_DIR/$WORKFLOW.conf"
 
     # stage workflow helper functions
