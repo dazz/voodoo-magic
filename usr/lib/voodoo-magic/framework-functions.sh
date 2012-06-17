@@ -83,10 +83,10 @@ StageWorkflowEnv() {
     declare -g WF_CONFIG_DIR="$WF_BASEDIR/conf"
     declare -g WF_DOC_DIR="$WF_BASEDIR/doc"
     declare -g WF_HELPER_DIR="$WF_BASEDIR/functions"
+    declare -g WF_TEMP_DIR="$WF_BASEDIR/tmp"
     declare -g WF_WORKFLOWS="$WF_BASEDIR/workflows"
 
-    declare -gA WF_ARGS
-    declare -gA WF_LONGARGS
+    [[ -d "$WF_TEMP_DIR" ]] && rm -rf "$WF_TEMP_DIR"/*
 }
 
 StageWorkflow() {
@@ -98,6 +98,14 @@ StageWorkflow() {
     Log "Staging workflow: $WORKFLOW"
     $DEBUG && set -x
     Source "$WF_FILE"
+    $DEBUG && set +x
+
+    # parse workflow arguments
+    Log "Parsing workflow arguments"
+    $DEBUG && set -x
+    ParseWorkflowArgs ${ARGS[@]}
+    $DEBUG && set +x
+
     $SIMULATE && return
 
     # execute workflow
@@ -105,6 +113,7 @@ StageWorkflow() {
     has_binary WORKFLOW_$WORKFLOW
     StopIfError "Can not find function: WORKFLOW_$WORKFLOW"
 
+    $DEBUG && set -x
     WORKFLOW_$WORKFLOW "${ARGS[@]}"
     $DEBUG && set +x
 }
