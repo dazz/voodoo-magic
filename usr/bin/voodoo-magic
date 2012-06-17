@@ -19,7 +19,7 @@
 # Product and versioning information
 PRODUCT="Voodoo-Magic"
 PROGRAM="${0##*/}"
-VERSION="0.0.1"
+VERSION="0.2.3"
 RELEASE_DATE="2012-06-08"
 
 CMD_OPTS=( "$@" )
