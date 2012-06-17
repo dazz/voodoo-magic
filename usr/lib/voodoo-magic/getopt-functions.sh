@@ -20,7 +20,7 @@ AddArg() {
     local arg="$1"; shift
     local cmd="$*"
     local raw="${arg/:/}"
-    local argsdir="$WF_BASEDIR/tmp/args"
+    local argsdir="$WF_TEMP_DIR/args"
     mkdir -p "$argsdir"
 
     if (( ${#raw} == 1 )); then
