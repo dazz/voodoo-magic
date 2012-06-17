@@ -33,7 +33,7 @@ Source() {
         else
             Log "Including ${1##$SHARE_DIR/}"
             $DEBUGSCRIPTS && set -x
-            source "$1"
+            source "$1" ${ARGS[@]}
             $DEBUGSCRIPTS && set +x
         fi
     else
@@ -57,26 +57,60 @@ SourceStage() {
     done
 }
 
-StageWorkflow() {
+StageWorkflowConfig() {
     # source the workflow config
-    Source "$WORKFLOW_DIR/$WORKFLOW/conf/$WORKFLOW.conf"
+    Source "$WF_CONFIG_DIR/$WORKFLOW.conf"
     Source "$CONF_DIR/$WORKFLOW.conf"
+}
 
+StageWorkflowHelpers() {
     # stage workflow helper functions
-    local workflow_functions="$WORKFLOW_DIR/$WORKFLOW/functions"
-    if [[ -d "$workflow_functions" ]]; then
+    if [[ -d "$WF_HELPER_DIR" ]]; then
         Log "Staging functions from dir for workflow: $WORKFLOW"
-        SourceStage "$workflow_functions"
-    elif [[ -f "$workflow_functions" ]]; then
+        SourceStage "$WF_HELPER_DIR"
+    elif [[ -f "$WF_HELPER_DIR" ]]; then
         Log "Staging functions from dir for workflow: $WORKFLOW"
-        Source "$workflow_functions"
+        Source "$WF_HELPER_DIR"
     else
-        Log "No functions found for workflow: $WORKFLOW"
+        Log "No helpers found for workflow: $WORKFLOW"
     fi
+}
+
+StageWorkflowEnv() {
+    declare -g WF_BASEDIR="$WORKFLOW_DIR/$WORKFLOW"
+    declare -g WF_FILE="$WF_BASEDIR/workflow_$WORKFLOW"
+
+    declare -g WF_CONFIG_DIR="$WF_BASEDIR/conf"
+    declare -g WF_DOC_DIR="$WF_BASEDIR/doc"
+    declare -g WF_HELPER_DIR="$WF_BASEDIR/functions"
+    declare -g WF_TEMP_DIR="$WF_BASEDIR/tmp"
+    declare -g WF_WORKFLOWS="$WF_BASEDIR/workflows"
+
+    declare -g WF_DESCRIPTION="$WF_CONFIG_DIR/description"
+    declare -g WF_USAGE="$WF_CONFIG_DIR/usage"
+
+    # empty temp dir if exists
+    [[ -d "$WF_TEMP_DIR" ]] && \
+        AddExitTask "rm -rf '$WF_TEMP_DIR'/*" && \
+        rm -rf "$WF_TEMP_DIR"/*
+}
+
+StageWorkflow() {
+    StageWorkflowEnv
+    StageWorkflowConfig
+    StageWorkflowHelpers
 
     # stage the workflow
     Log "Staging workflow: $WORKFLOW"
-    Source "$WORKFLOW_DIR/$WORKFLOW/workflow_$WORKFLOW"
+    $DEBUG && set -x
+    Source "$WF_FILE"
+    $DEBUG && set +x
+
+    # parse workflow arguments
+    Log "Parsing workflow arguments"
+    $DEBUG && set -x
+    ParseWorkflowArgs ${ARGS[@]}
+    $DEBUG && set +x
 
     $SIMULATE && return
 
@@ -87,5 +121,6 @@ StageWorkflow() {
 
     $DEBUG && set -x
     WORKFLOW_$WORKFLOW "${ARGS[@]}"
+    $DEBUG && set +x
 }
 

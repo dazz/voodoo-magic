@@ -37,6 +37,7 @@ Error() {
     fi
     VERBOSE=1
     LogPrint "Error: $*"
+    LogPrint "See $PROGRAM help $WORKFLOW"
     kill -USR1 $MASTER_PID 
 }
 
