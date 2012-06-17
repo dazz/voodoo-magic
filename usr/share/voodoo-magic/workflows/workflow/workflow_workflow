@@ -24,7 +24,6 @@ WORKFLOW_workflow() {
         echo
     else
         local workflow="$WF_WORKFLOWS/$1"
-        shift
         if [[ -f "$workflow" ]]; then
             Source "$workflow"
         else
