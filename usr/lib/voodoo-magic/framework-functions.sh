@@ -91,8 +91,8 @@ StageWorkflowEnv() {
 
     # empty temp dir if exists
     [[ -d "$WF_TEMP_DIR" ]] && \
-        rm -rf "$WF_TEMP_DIR"/* && \
-        AddExitTask "rm '$WF_TEMP_DIR'/*"
+        AddExitTask "rm -rf '$WF_TEMP_DIR'/*" && \
+        rm -rf "$WF_TEMP_DIR"/*
 }
 
 StageWorkflow() {
