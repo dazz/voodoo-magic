@@ -86,6 +86,10 @@ StageWorkflowEnv() {
     declare -g WF_TEMP_DIR="$WF_BASEDIR/tmp"
     declare -g WF_WORKFLOWS="$WF_BASEDIR/workflows"
 
+    declare -g WF_DESCRIPTION="$WF_CONFIG_DIR/description"
+    declare -g WF_USAGE="$WF_CONFIG_DIR/usage"
+
+    # empty temp dir if exists
     [[ -d "$WF_TEMP_DIR" ]] && rm -rf "$WF_TEMP_DIR"/*
 }
 
