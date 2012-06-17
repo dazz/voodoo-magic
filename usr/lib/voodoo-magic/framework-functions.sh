@@ -33,7 +33,7 @@ Source() {
         else
             Log "Including ${1##$SHARE_DIR/}"
             $DEBUGSCRIPTS && set -x
-            source "$1" $@
+            source "$1" ${ARGS[@]}
             $DEBUGSCRIPTS && set +x
         fi
     else

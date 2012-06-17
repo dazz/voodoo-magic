@@ -71,5 +71,9 @@ ParseWorkflowArgs() {
         fi
         shift
     done
+    shift
+    
+    # keep the remaining args for the workflows to use
+    ARGS=( $@ )
 }
 
