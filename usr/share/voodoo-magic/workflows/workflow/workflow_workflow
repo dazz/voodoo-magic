@@ -16,11 +16,6 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-#AddArg 'a' 'a=foo'
-#AddArg 'b:' 'b=$2'
-#AddArg 'version' 'V=baz'
-#AddArg 'help:' 'H=$2'
-
 WORKFLOW_workflow() {
     if [[ -z "$1" ]]; then
         echo
@@ -29,8 +24,9 @@ WORKFLOW_workflow() {
         echo
     else
         local workflow="$WF_WORKFLOWS/$1"
+        shift
         if [[ -f "$workflow" ]]; then
-            source "$workflow"
+            Source "$workflow"
         else
             Error "Unknown command: $1"
         fi
