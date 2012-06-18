@@ -102,15 +102,15 @@ StageWorkflow() {
 
     # stage the workflow
     Log "Staging workflow: $WORKFLOW"
-    $DEBUG && set -x
+    $DEBUGSCRIPTS && set -x
     Source "$WF_FILE"
-    $DEBUG && set +x
+    $DEBUGSCRIPTS && set +x
 
     # parse workflow arguments
     Log "Parsing workflow arguments"
-    $DEBUG && set -x
+    $DEBUGSCRIPTS && set -x
     ParseWorkflowArgs ${ARGS[@]}
-    $DEBUG && set +x
+    $DEBUGSCRIPTS && set +x
 
     $SIMULATE && return
 
@@ -119,8 +119,8 @@ StageWorkflow() {
     has_binary WORKFLOW_$WORKFLOW
     StopIfError "Can not find function: WORKFLOW_$WORKFLOW"
 
-    $DEBUG && set -x
+    $DEBUGSCRIPTS && set -x
     WORKFLOW_$WORKFLOW "${ARGS[@]}"
-    $DEBUG && set +x
+    $DEBUGSCRIPTS && set +x
 }
 
