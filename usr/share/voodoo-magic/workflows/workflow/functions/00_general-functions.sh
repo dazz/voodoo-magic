@@ -20,3 +20,4 @@
 #AddArg 'b:' 'b=$2'
 #AddArg 'version' 'V=baz'
 #AddArg 'help:' 'H=$2'
+# Use ${ARGS[@]} to access args remaining after running getopt
