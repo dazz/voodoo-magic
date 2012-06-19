@@ -16,17 +16,6 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# provide a precise timestamp when running in debug mode
-if $DEBUG || $DEBUG_SCRIPTS; then
-    Timestamp() {
-        date +"%Y-%m%d %H:%M:%S.%N"
-    }
-else
-    Timestamp() {
-        date +"%Y-%m%d %H:%M:%S"
-    }
-fi
-
 Error() {
     # if fist arg is an int, use it as exit-code
     if [ $1 -eq $1 ] 2>/dev/null; then

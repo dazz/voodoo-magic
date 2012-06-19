@@ -78,3 +78,14 @@ get_path() {
 exec 8>/dev/null
 QuietAddExitTask "exec 8>&-"
 
+# provide a precise timestamp when running in debug mode
+if $DEBUG || $DEBUG_SCRIPTS; then
+    Timestamp() {
+        date +"%Y-%m%d %H:%M:%S.%N"
+    }
+else
+    Timestamp() {
+        date +"%Y-%m%d %H:%M:%S"
+    }
+fi
+
