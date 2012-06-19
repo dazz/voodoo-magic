@@ -32,11 +32,5 @@ WORKFLOW_help() {
     Print
     PrintUsage $target
     Print
-    [[ -z $1 ]] || return
-    Print "Available workflows:
-    $(
-        find "$WORKFLOW_DIR" -mindepth 1 -maxdepth 1 -type d -printf '\t%f\n'
-    )"
-    Print
 }
 
