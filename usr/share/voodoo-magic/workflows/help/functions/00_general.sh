@@ -16,10 +16,18 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+StripExcludesPipe() {
+    local text="${*:-$(cat)}"
+    echo "$text" |\
+        sed "s/\$PROGRAM/$PROGRAM/g" |\
+        sed "s/\$PRODUCT/$PRODUCT/g" |\
+        sed "s/\$WORKFLOW/$WORKFLOW/g"
+}
+
 PrintDescription() {
     local description="$1/description"
     if [[ -f "$description" ]]; then
-        cat "$description"
+        cat "$description" | StripExcludesPipe
     else
         Print "No description found: $1"
     fi
@@ -28,7 +36,7 @@ PrintDescription() {
 PrintUsage() {
     local usage="$1/usage"
     if [[ -f "$usage" ]]; then
-        cat "$usage"
+        cat "$usage" | StripExcludesPipe
     else
         Print "No usage information found: $1"
     fi
