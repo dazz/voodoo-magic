@@ -31,7 +31,7 @@ IFS=\$'\\n' INSTALL_DIRS=( $(
     for dir in "${directories[@]}"; do
         echo "$dir"
     done
-)
+    )
 )
 EOF
     ) > "$filename"
