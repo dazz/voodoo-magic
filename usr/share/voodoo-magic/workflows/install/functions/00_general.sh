@@ -26,7 +26,6 @@ SaveDirectoryTree() {
     ) )
     (
         cat <<EOF
-#!/bin/bash
 # directories to be removed when uninstalling
 IFS=\$'\\n' INSTALL_DIRS=( $(
     for dir in "${directories[@]}"; do
@@ -39,9 +38,6 @@ EOF
 }
 
 Install() {
-    #ExitIfNotRootUser
-    SaveDirectoryTree
-
     # array for file list
     IFS=$'\n' files=( $(
         find "$BASEDIR" ! -regex '.*/\..*' -type f -printf '%P\n'
