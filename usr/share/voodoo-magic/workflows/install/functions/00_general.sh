@@ -39,7 +39,7 @@ EOF
 }
 
 Install() {
-    ExitIfNotRootUser
+    #ExitIfNotRootUser
     SaveDirectoryTree
 
     # array for file list
@@ -48,8 +48,10 @@ Install() {
     ) )
 
     # install file list to /
+    LogPrint "Installing files..."
     for file in "${files[@]}"; do
         install -D "$BASEDIR/$file" /"$file"
     done
+    LogPrint "Done"
 }
 
