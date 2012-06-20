@@ -19,7 +19,7 @@
 ExitIfNotRootUser() {
     if (( $(id --user) != 0 )); then
         LogPrint "ERROR: Workflow '$WORKFLOW' needs ROOT privileges!"
-        echo "Aborting due to unsatisfied privilieges." >&2
+        Debug "Effective UID is: $(id --user)"
         exit 1
     fi
 

@@ -17,13 +17,13 @@
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 # Product and versioning information
-PRODUCT="Voodoo-Magic"
 PROGRAM="${0##*/}"
-VERSION="0.2.3"
+PRODUCT="Voodoo-Magic"
+VERSION="0.4.2"
 RELEASE_DATE="2012-06-08"
 
+# save command options
 CMD_OPTS=( "$@" )
-STARTTIME=$SECONDS
 
 BASEDIR="$(readlink -f ${0%/*/*/*})"
 CONF_DIR="$BASEDIR/etc/$PROGRAM"
@@ -36,6 +36,7 @@ DOC_DIR="$BASEDIR/usr/share/doc/$PROGRAM"
 DEBUG=false
 DEBUGSCRIPTS=false
 SIMULATE=false
+VERBOSE=false
 
 EXIT_CODE=0
 
@@ -128,18 +129,11 @@ if [[ -r "$LOGFILE" ]]; then
 fi
 exec 2>"$LOGFILE" || echo "ERROR: Could not create $LOGFILE" >&2
 
-if ! IsInArray "$WORKFLOW" "${LOCKLESS_WORKFLOWS[@]}"; then
-    LogPrint "$PRODUCT $VERSION / $RELEASE_DATE starting up."
-    $SIMULATE && LogPrint "- SIMULATION MODE -"
-    Log "Command line options: $0 ${CMD_OPTS[@]}"
-fi
-
-# is this a verbose workflow?
-for workflow in "${ALWAYS_VERBOSE[@]}"; do
-    if [[ $WORKFLOW == $workflow ]]; then
-        VERBOSE=true
-        break
-    fi
-done
+Log "$PRODUCT $VERSION / $RELEASE_DATE starting up."
+Log "Command line options: $0 ${CMD_OPTS[@]}"
+$SIMULATE && LogPrint "- SIMULATION MODE -"
 
 StageWorkflow "$WORKFLOW"
+
+ENDTIME=$SECONDS
+Log "$PROGRAM finished after $ENDTIME second(s)."

@@ -61,11 +61,9 @@ PrintIfError() {
 }
 
 Log() {
-    if [[ -n $1 ]]; then
-        echo "$(Timestamp) $*"
-    else
-        echo "$(Timestamp) $(cat)"
-    fi >&2
+    local message="${1:-$(cat)}"
+    echo "$(Timestamp) $message" >&2
+    $VERBOSE && Print "$message"
 }
 
 LogIfError() {
