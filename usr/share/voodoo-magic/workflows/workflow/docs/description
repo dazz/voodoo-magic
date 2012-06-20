@@ -1,7 +1,0 @@
-A workflow is a piece of Bash script-code designated and designed for exactly
-one precise purpose, excluding any kind of peripheral logic. To put it in other
-words, it is all that is left from any regular Bash script after you've removed
-any lines concerning logging, error-handling config-parsing, parsing of
-shell-options, preparing the environment, cleanup-tasks and all sorts of the
-crap that is required for all sorts of reasons. Basically, the only thing left
-for you to do is to create a new workflow and start writing voodoo-magic.
