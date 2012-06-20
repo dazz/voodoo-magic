@@ -16,6 +16,14 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+# NAMING CONVENTIONS THROUGHOUT THIS SCRIPT
+# Variables:
+# - UPPERCASE        - global, as in: accessible and all workflows
+# - lowercase        - use lower-case vars in your workflows
+# Functions:
+# - HelperFunctions  - helper functions for the workflows
+# - hidden_functions - hidden functiions for the framework
+
 # Product and versioning information
 PROGRAM="${0##*/}"
 PRODUCT="Voodoo-Magic"
