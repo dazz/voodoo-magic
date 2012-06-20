@@ -89,10 +89,11 @@ StageWorkflowEnv() {
     declare -g WF_DESCRIPTION="$WF_CONFIG_DIR/description"
     declare -g WF_USAGE="$WF_CONFIG_DIR/usage"
 
-    # empty temp dir if exists
-    [[ -d "$WF_TEMP_DIR" ]] && \
-        AddExitTask "rm -rf '$WF_TEMP_DIR'/*" && \
-        rm -rf "$WF_TEMP_DIR"/*
+    # create a tmp dir and remove any possible left-behinds
+    [[ -d "$WF_TEMP_DIR" ]] && rm -rf "$WF_TEMP_DIR"
+    mkdir -p "$WF_TEMP_DIR"
+    AddExitTask "rm -rf '$WF_TEMP_DIR'"
+        
 }
 
 StageWorkflow() {
