@@ -2,17 +2,18 @@ A workflow is a piece of Bash script-code designated and designed for exactly
 one precise purpose, excluding any kind of peripheral logic. To put it in other
 words, it is all that is left from any regular Bash script after you've removed
 any lines concerning logging, error-handling config-parsing, parsing of
-shell-options, preparing the environment, cleanup-tasks and all sorts of the
-crap that is required for all sorts of reasons. Basically, the only thing left
-for you to do is to create a new workflow and start writing voodoo-magic.
+shell-options, preparing the environment, cleanup-tasks and all sorts of crap
+that is required for all sorts of reasons. Basically, the only thing left for
+you to do is to create a new workflow and start writing voodoo-magic.
 
-A workflow is basically a directory under usr/share/voodoo-magic/workflows/
-carrying the name of the workflow, including a file with the name
-workflow_<wf_name>. The file must contain at least one function with the name
-WORKFLOW_<$wf_name>. This function is the entry-point of your workflow, it is
-called when the framework is done with its bootstraping process and hands over
-to your script. Additional features can be added by creating directories and
-files accordingly and filling them with appropriate content.
+From a technical point of view, a workflow is made up of a directory under
+usr/share/voodoo-magic/workflows/ carrying the name of the workflow, including
+a file with the name workflow_<wf_name>. The file must contain at least one
+function with the name WORKFLOW_<$wf_name>. This function is the entry-point of
+your workflow, it is called when the framework is done with its bootstraping
+process and hands over to your script. Additional features can be added by
+creating directories and files accordingly and filling them with appropriate
+content.
 
 An all-features-on directory structure of a workflow would look like this:
 workflow/
