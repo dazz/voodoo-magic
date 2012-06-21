@@ -1,1 +1,2 @@
-Usage: install
+Usage: $PROGRAM install
+       $PROGRAM uninstall
