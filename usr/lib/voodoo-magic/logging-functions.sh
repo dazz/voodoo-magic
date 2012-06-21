@@ -26,7 +26,8 @@ Error() {
     fi
     VERBOSE=1
     LogPrint "Error: $*"
-    LogPrint "See $PROGRAM help $WORKFLOW"
+    LogPrint "See '$PROGRAM help $WORKFLOW' for usage information."
+    Print
     kill -USR1 $MASTER_PID 
 }
 
@@ -50,6 +51,10 @@ BugIfError() {
 
 Debug() {
     $DEBUG && Log "$@" && return
+}
+
+DebugIfError() {
+    (( $? != 0 )) && Debug "$@"
 }
 
 Print() {

@@ -47,9 +47,11 @@ DoExitTasks(){
         eval "$task"
     done
 }
+# trap for exit tasks
+builtin trap DoExitTasks 0
 
-builtin trap DoExitTasks 0              # trap for exit tasks
-exec 7>&1                               # duplicate STD_IN to fd7 for Print()
+# duplicate STD_IN to fd7 for Print()
+exec 7>&1
 QuietAddExitTask "exec 7>&-"
 
 # USR1 is used to abort on errors. we store the PID of the master file, so an
@@ -57,7 +59,8 @@ QuietAddExitTask "exec 7>&-"
 MASTER_PID=$$
 builtin trap "echo 'Aborting due to an error, check $LOGFILE for details' >&7; kill $MASTER_PID" USR1
 
-function trap () { # make sure nobody else can use trap
+# make sure nobody else can use trap
+function trap () {
     BugError "Forbidden to use trap '$@'. Use AddExitTask instead"
 }
 
