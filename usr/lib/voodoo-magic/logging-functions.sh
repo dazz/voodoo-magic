@@ -77,7 +77,7 @@ LogIfError() {
 
 LogPrint() {
     Log "$@"
-    Print "$@"
+    $VERBOSE || Print "$@"
 }
 
 LogPrintIfError() {
