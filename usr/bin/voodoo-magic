@@ -33,7 +33,12 @@ RELEASE_DATE="2012-06-08"
 # save command options
 CMD_OPTS=( "$@" )
 
-BASEDIR="$(readlink -f ${0%/*/*/*})"
+if [[ "$0" == /* ]]; then
+    SCRIPT="$0"
+else
+    SCRIPT="$(which "$0")"
+fi
+BASEDIR="$(readlink -f ${SCRIPT%/*}/../../)"
 CONF_DIR="$BASEDIR/etc/$PROGRAM"
 LIB_DIR="$BASEDIR/usr/lib/$PROGRAM"
 SHARE_DIR="$BASEDIR/usr/share/$PROGRAM"
@@ -122,12 +127,11 @@ if ! has_binary pidof; then
 fi
 
 # do not run if another instance is running. pidof -x will always report at least $$
-SCRIPT_FILE="$(readlink -f $(get_path "$0" || echo "$0"))"
-PID=$(pidof -x -o %PPID "./usr/bin/voodoo-magic") || true
+PID=$(pidof -x -o %PPID "$0") || true
 if IsInArray "$WORKFLOW" "${LOCKLESS_WORKFLOWS[@]}"; then
     LOGFILE="$LOGFILE.lockless"
 elif [[ "$PID" ]] ; then
-    echo "ERROR: $SCRIPT_FILE is already running, not starting again" >&2
+    echo "ERROR: $SCRIPT is already running, not starting again" >&2
     exit 1
 fi
 
