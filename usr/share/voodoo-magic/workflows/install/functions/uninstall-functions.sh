@@ -16,6 +16,8 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+AddArg 'u' 'uninstall=true'
+
 LoadLayoutFile() {
     Log "Seeking layout-file..."
     if [[ ! -f "$layout_file" ]]; then
