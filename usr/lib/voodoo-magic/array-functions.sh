@@ -18,8 +18,8 @@
 
 # some array functions
 
-# return wether $1 equals one of the remaining arguments
 IsInArray() {
+    # return wether $1 equals one of the remaining arguments
     local needle="$1"
     while shift; do
         [[ "$needle" == "$1" ]] && return 0

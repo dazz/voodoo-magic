@@ -17,6 +17,9 @@
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 ExitIfNotRootUser() {
+    # Helper for demanding root privileges. Simply call this with no
+    # arguments and the framework will bail out if the EUID is not 0.
+    # example: ExitIfNotRootUser
     if (( $(id --user) != 0 )); then
         LogPrint "ERROR: Workflow '$WORKFLOW' needs ROOT privileges!"
         Debug "Effective UID is: $(id --user)"

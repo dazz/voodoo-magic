@@ -19,15 +19,20 @@
 EXIT_TASKS=( ) # Array for exit tasks
 
 AddExitTask() {
+    # Add exit-task like deleting tempfiles and closing fd's
+    # example: AddExitTask "rm '$tempfile'"
     EXIT_TASKS=( "$*" "${EXIT_TASKS[@]}" )
     Debug "Added $* as exit task"
 }
 
 QuietAddExitTask() {
+    # same as AddExitTask, only that it skips debug-logging
     EXIT_TASKS=( "$*" "${EXIT_TASKS[@]}" )
 }
 
 RemoveExitTask() {
+    # Remove an exit-task, e.g. you're workflow has cleaned up already
+    # example: RemoveExitTask "rm '$tempfile'"
     local removed=false
     for (( c=0 ; c<${#EXIT_TASKS[@]} ; c++ )); do
         if [[ ${EXIT_TASKS[c]} == "$*" ]]; then
@@ -41,6 +46,8 @@ RemoveExitTask() {
 }
 
 DoExitTasks(){
+    # Execute all exit-tasks. This function is called by voodoo-magic when
+    # the workflow has finished execution. Don't call this manually.
     Log "Running exit tasks."
     for task in "${EXIT_TASKS[@]}"; do
         Debug "Exit task '$task'"
@@ -78,6 +85,7 @@ get_path() {
     type -p $1 2>&8
 }
 
+# >&8 is from here a shortcut for >/dev/null
 exec 8>/dev/null
 QuietAddExitTask "exec 8>&-"
 

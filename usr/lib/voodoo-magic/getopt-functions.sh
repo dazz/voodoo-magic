@@ -17,6 +17,12 @@
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 AddArg() {
+    # Helper for adding command-line arguments available with your workflow.
+    # Use ${ARGS[@]} to access any args that remain after running getopt.
+    # examples: AddArg 'a' 'a=foo'
+    #           AddArg 'b:' 'b=$2'
+    #           AddArg 'version' 'V=baz'
+    #           AddArg 'help:' 'H=$2'
     local arg="$1"; shift
     local cmd="$*"
     local raw="${arg/:/}"
@@ -34,6 +40,12 @@ AddArg() {
 }
 
 ParseWorkflowArgs() {
+    # A getopt wrapper for the workflows. The arguments of the workflow are
+    # parsed immediately before handing the thread down to the workflow. This
+    # also means, that the logic that is implemented within each argument is
+    # parsed before the workflow has been started. Thus, the most practical
+    # way of accomplishing this is to set a variable while parsing the arg
+    # which you can later use in an if-statement in the workflow.
     local args=""
     local long=""
     declare -a a_args=()
