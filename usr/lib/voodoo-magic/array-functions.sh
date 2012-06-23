@@ -19,7 +19,7 @@
 # some array functions
 
 IsInArray() {
-    # return wether $1 equals one of the remaining arguments
+    # return whether $1 equals one of the remaining arguments
     local needle="$1"
     while shift; do
         [[ "$needle" == "$1" ]] && return 0

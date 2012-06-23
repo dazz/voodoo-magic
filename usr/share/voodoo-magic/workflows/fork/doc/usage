@@ -1,7 +1,7 @@
 Usage: fork <name> [ -- -x <workflow> , --target <targetdir> , --product <brand> ]
 
 Available options:
-    -x              - exclude <workflow> from fork; can be provided multible
+    -x              - exclude <workflow> from fork; can be provided multiple
                       times.
     --target        - set target directory for the new fork to <targetdir>
     --product       - set product name / brand of the new fork to <brand>

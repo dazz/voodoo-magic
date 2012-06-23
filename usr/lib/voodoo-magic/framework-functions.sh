@@ -52,8 +52,8 @@ SourceStage() {
     StopIfError "Can not SourceStage, not a directory: $stagedir"
     
     # this little sed hack is used for sorting the files by their prefixing
-    # digit sequence. it sourounds the digits with exclamation marks so that
-    # when sorting by separator '!' they will allways appear in field two. the
+    # digit sequence. it surrounds the digits with exclamation marks so that
+    # when sorting by separator '!' they will always appear in field two. the
     # 'tr' will then remove the exclamation marks, but the files are already in
     # correct order at this point. the downside to this is that this will not
     # work with files having an exclamation mark in their regular filename!
@@ -68,7 +68,7 @@ SourceStage() {
 
 StageWorkflowConfig() {
     # Helper for sourcing the workflow configuration files. This helper is
-    # called by the framwork shortly before the workflow is executed. You
+    # called by the framework shortly before the workflow is executed. You
     # should not call this manually.
     Source "$WF_CONFIG_DIR/$WORKFLOW.conf"
     Source "$CONF_DIR/$WORKFLOW.conf"
@@ -76,7 +76,7 @@ StageWorkflowConfig() {
 
 StageWorkflowHelpers() {
     # Helper for staging the workflow's helper functions. This helper is
-    # called by the framwork shortly before the workflow is executed. You
+    # called by the framework shortly before the workflow is executed. You
     # should not call this manually.
     if [[ -d "$WF_HELPER_DIR" ]]; then
         Log "Staging functions from dir for workflow: $WORKFLOW"
@@ -91,7 +91,7 @@ StageWorkflowHelpers() {
 
 StageWorkflowEnv() {
     # Helper for staging the workflow's environment variables. This helper is
-    # called by the framwork shortly before the workflow is executed. You
+    # called by the framework shortly before the workflow is executed. You
     # should not call this manually.
     declare -g WF_BASEDIR="$WORKFLOW_DIR/$WORKFLOW"
     declare -g WF_FILE="$WF_BASEDIR/workflow_$WORKFLOW"
@@ -113,7 +113,7 @@ StageWorkflowEnv() {
 }
 
 StageWorkflow() {
-    # Helper for staging workflows. This helper is called by the framwork
+    # Helper for staging workflows. This helper is called by the framework
     # shortly before the workflow is executed. You should not call this
     # manually.
     StageWorkflowEnv

@@ -37,7 +37,7 @@ CloneStructureIntoWorkSpace() {
 
     pushd "$BASEDIR" >&8
     
-    # collect filelist in array
+    # collect file list in array
     IFS=$'\n' DIRECTORYSTRUCTURE=( $(
         find . \( ! -regex '.*/\..*' \) | sed 's#\./##'
     ) )

@@ -21,14 +21,14 @@
 # - UPPERCASE        - global, as in: accessible and all workflows
 # - lowercase        - use lower-case vars in your workflows
 # Functions:
-# - HelperFunctions  - allmost all functions are in CamelCase. There are
-#                      exeptions, however... e.g. WORKFLOW_<workflow>.
+# - HelperFunctions  - almost all functions are in CamelCase. There are
+#                      exceptions, however... e.g. WORKFLOW_<workflow>.
 
-### UNDERLAYING DESIGN-CONCEPT ###
+### UNDERLYING DESIGN-CONCEPT ###
 # Voodoo-Magic takes advantage of the GNU 'source' binary to include other
 # script files. The possibility to spread code across several files brings up
-# the idea of structuring your files in a very definit directory tree layout
-# and then sourcing them recursivly in a predefined order.
+# the idea of structuring your files in a very definite directory tree layout
+# and then sourcing them recursively in a predefined order.
 # Suddenly it is possible to put process-logic into the directory structure
 # itself, meaning that changing the order or location of the script files,
 # changes the workflow as scripts are sourced in a different way. If-conditions
@@ -40,17 +40,17 @@
 # directory structure that the framework can source because it knows the
 # internal layout. Now assume we call one sub-directory conf/ and another one
 # we could call functions/ and another one doc/ and so on, and we have various
-# directory structures of exectly this type laying around side by side. We can
-# check if a directory with the name $1 exists and if so, recursivly source all
+# directory structures of exactly this type laying around side by side. We can
+# check if a directory with the name $1 exists and if so, recursively source all
 # files in a sensefully predefined order inside that directory. That's pretty
 # much all the magic there is to it.
 #
 # Realizing the possibilities of this design-concept, the idea arose to write a
 # development framework, by adding plenty of useful helper functions and global
 # variables around the workflow before sourcing it, opening the possibility to
-# write small scripts by outsourcing all the repetative logic into the
+# write small scripts by outsourcing all the repetitive logic into the
 # outlaying framework. The framework provides an environment for the workflow
-# with tools and helpers for repetative tasks you would otherwise have to write
+# with tools and helpers for repetitive tasks you would otherwise have to write
 # over and over.
 #
 # Severe parts of the design-concept have been adapted from Rear - Relax and

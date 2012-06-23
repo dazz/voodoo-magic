@@ -33,7 +33,7 @@ WORKFLOW_help() {
     $detailed && PrintDetails $target && Print
     PrintUsage $target
     Print
-    Print "Use '--' to seperate workflow arguments from framework arguments."
+    Print "Use '--' to separate workflow arguments from framework arguments."
     Print "See '$PROGRAM help [ <workflow> ] -- -v' for more information."
 }
 

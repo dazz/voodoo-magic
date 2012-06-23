@@ -7,5 +7,5 @@ Two modes of execution are available through CLONE_GIT=[true|false]:
  Set:         CLONE_GIT=true
  - GIT      - Additionally to REGULAR MODE, the GIT MODE will copy the .git
               folder and all recursively found .gitignore files. Before
-              installing to target-diretory, it will commit all changes made
+              installing to target-directory, it will commit all changes made
               due to forking.

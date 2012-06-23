@@ -18,7 +18,7 @@
 
 Error() {
     # Helper for simulating an exception. Use this to define that an error
-    # in your workflow has occured. This function writes all logs down to disk
+    # in your workflow has occurred. This function writes all logs down to disk
     # and runs all exit tasks before printing the error, a description, as well
     # as some useful debug information to stdout. If the first argument of the
     # function call is an integer, the framework will use this as the final
@@ -50,7 +50,7 @@ BugError() {
     # Helper for raising a bug exception. A bug exception complements a regular
     # Error exception, except that it tells the use that the problem seems to be
     # caused by a possible bug and that this should be reported to the authors.
-    # example: BugError "23 Can not detect disklayout"
+    # example: BugError "23 Can not detect disclayout"
     if (( $1 == $1 )); then
         EXIT_CODE=$1
     else
