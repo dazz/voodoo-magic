@@ -1,2 +1,4 @@
-The FORK workflow allows you to fork this project into a new project, e.g. copy
-the entire framework code-base to a new directory root.
+The FORK workflow allows you to fork the framework into a new project, e.g.
+copy the entire framework code-base to a new directory root, while renaming all
+directory- and filenames, as well es replacing all occurances of product names
+inline with the new fork's project name.
