@@ -59,7 +59,7 @@
 # Product and versioning information
 PROGRAM="${0##*/}"
 PRODUCT="Voodoo-Magic"
-VERSION="rc-0.4.2"
+VERSION="rc-0.4.2-r1"
 RELEASE_DATE="2012-06-23"
 
 # save command options
