@@ -129,7 +129,7 @@ StageWorkflow() {
     # parse workflow arguments, but only if it makes sense
     Log "Parsing workflow arguments"
     $DEBUGSCRIPTS && set -x
-    [[ ${ARGS[*]} *-* ]] && ParseWorkflowArgs ${ARGS[@]}
+    [[ ${ARGS[*]} == *-* ]] && ParseWorkflowArgs ${ARGS[@]}
     $DEBUGSCRIPTS && set +x
 
     $SIMULATE && return
