@@ -27,15 +27,7 @@ academic context, after all. Please, feel welcome to contribute to voodoo-magic
 in form of framework optimizations, creative ideas and all sorts of nifty
 voodoo-magic workflows.
 
-Happy hacking.
-
-
-Installation
-============
-
-Voodoo-Magic comes with an installation workflow so it can easily be installed
-to /. See `voodoo-magic help install` for more information.
-
+> **Voodoo-Magic is still alpha-state software and under ongoing development.**
 
 Underlaying Design-Concept
 ==========================
@@ -88,3 +80,35 @@ You should have received a copy of the GNU General Public License along with
 Voodoo-Magic; if not, write to the Free Software Foundation, Inc., 51 Franklin
 St, Fifth Floor, Boston, MA  02110-1301  USA
 
+
+Installation
+============
+
+Voodoo-Magic comes with an installation workflow so it can easily be installed
+to /. See `voodoo-magic help install` for more information.
+
+
+Features
+========
+
+Voodoo-Magic currently supports the following features:
+- General
+  - High flexibility and extendability achieved by its modularity
+  - Open-Source straight up from the bottom
+- Logging
+  - Single stand-alone logfile
+  - Log-rotation (rotates once per execution of the framework)
+  - Redirecting of stderr into the logfile while executing workflows
+  - Debug-Logging (provided by helper)
+  - Script-Debug-Mode (log workflow related jobs with set -x)
+  - Verbose mode (echo everything to stdout that goes to the logfile)
+- Available Helpers
+  - Echo to stdout and the logfile under various conditions
+  - Easily add, parse and validate shell-arguments for workflows
+  - Intuitive handling of exit-tasks, simply use AddExitTask 'command'
+  - Several other various helper functions
+- Available Workflows
+  - Meta-workflow for managing workflows, e.g. create new ones, listing
+    availabe workflows, as well as packaging and distribution of workflows
+  - Install the framework to / (also includes routines for uninstalling)
+  - Fork the entire framework into a new project (incl. fork-commit)
