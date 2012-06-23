@@ -59,8 +59,8 @@
 # Product and versioning information
 PROGRAM="${0##*/}"
 PRODUCT="Voodoo-Magic"
-VERSION="0.4.2"
-RELEASE_DATE="2012-06-08"
+VERSION="rc-0.4.2"
+RELEASE_DATE="2012-06-23"
 
 # save command options
 CMD_OPTS=( "$@" )
