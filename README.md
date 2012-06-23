@@ -60,7 +60,7 @@ write small scripts by outsourcing all the repetative logic into the outlaying
 framework. The framework provides an environment for the workflow with tools and
 helpers for repetative tasks you would otherwise have to write over and over.
 
-Severe parts of the design-concept have been adapted by Rear - Relax and
+Severe parts of the design-concept have been adapted from Rear - Relax and
 Recover.
 
 
