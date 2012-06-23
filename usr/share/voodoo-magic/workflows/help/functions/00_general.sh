@@ -16,7 +16,11 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-StripExcludesPipe() {
+AddArg 'v' 'detailed=true'
+AddArg 'verbose' 'detailed=true'
+AddArg 'more' 'detailed=true'
+
+ExpandVariables() {
     local text="${*:-$(cat)}"
     echo "$text" |\
         sed "s/\$PROGRAM/$PROGRAM/g" |\
@@ -27,7 +31,7 @@ StripExcludesPipe() {
 PrintDescription() {
     local description="$1/description"
     if [[ -f "$description" ]]; then
-        cat "$description" | StripExcludesPipe
+        cat "$description" | ExpandVariables
     else
         Print "No description found: $1"
     fi
@@ -36,9 +40,18 @@ PrintDescription() {
 PrintUsage() {
     local usage="$1/usage"
     if [[ -f "$usage" ]]; then
-        cat "$usage" | StripExcludesPipe
+        cat "$usage" | ExpandVariables
     else
         Print "No usage information found: $1"
+    fi
+}
+
+PrintDetails() {
+    local details="$1/details"
+    if [[ -f "$details" ]]; then
+        cat "$details" | ExpandVariables
+    else
+        Print "No details available: $1"
     fi
 }
 

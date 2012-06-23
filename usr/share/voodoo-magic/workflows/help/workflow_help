@@ -22,15 +22,18 @@ LOCKLESS_WORKFLOWS=( ${LOCKLESS_WORKFLOWS[@]} 'help' )
 
 WORKFLOW_help() {
     local target="${1:-$WORKFLOW}"
+    detailed=${detailed:-false}
     if [[ "$target" == 'help' ]]; then
         target="$DOC_DIR"
     else
         target="$WORKFLOW_DIR/$target/doc"
     fi
-    Print
     PrintDescription $target
     Print
+    $detailed && PrintDetails $target && Print
     PrintUsage $target
     Print
+    Print "Use '--' to seperate workflow arguments from framework arguments."
+    Print "See '$PROGRAM help [ <workflow> ] -- -v' for more information."
 }
 

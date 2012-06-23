@@ -3,6 +3,3 @@ Usage: workflow <COMMAND>
 Available commands are:
     list        - show a list of available workflows
     new         - create a new workflow
-
-See '$PROGRAM help <WORKFLOW>` for more information on the individual
-workflows.

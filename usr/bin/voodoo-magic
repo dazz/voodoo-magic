@@ -62,7 +62,8 @@ fi
 eval set -- "$OPTS"
 while true; do
     case $1 in
-        (-h|--help) WORKFLOW="help";;
+        (-h) WORKFLOW="help";;
+        (--help) WORKFLOW="help"; detailed=true;;
         (-V|--version) echo -e "$PRODUCT $VERSION / $RELEASE_DATE"; exit 0;;
         (-d) DEBUG=true;;
         (-D) DEBUGSCRIPTS=true;;
