@@ -1,6 +1,7 @@
-Usage: fork NAME [ -- -x WORKFLOW , --target DIRECTORY , --product BRAND ]
+Usage: fork <name> [ -- -x <workflow> , --target <targetdir> , --product <brand> ]
 
 Available options:
-    -x              - exclude COMMAND from fork
-    --target        - target-directory for the new fork
-    --product       - product/brand of the new fork
+    -x              - exclude <workflow> from fork; can be provided multible
+                      times.
+    --target        - set target directory for the new fork to <targetdir>
+    --product       - set product name / brand of the new fork to <brand>

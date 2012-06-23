@@ -16,16 +16,61 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+### NAMING CONVENTIONS THROUGHOUT THIS SCRIPT ###
+# Variables:
+# - UPPERCASE        - global, as in: accessible and all workflows
+# - lowercase        - use lower-case vars in your workflows
+# Functions:
+# - HelperFunctions  - allmost all functions are in CamelCase. There are
+#                      exeptions, however... e.g. WORKFLOW_<workflow>.
+
+### UNDERLAYING DESIGN-CONCEPT ###
+# Voodoo-Magic takes advantage of the GNU 'source' binary to include other
+# script files. The possibility to spread code across several files brings up
+# the idea of structuring your files in a very definit directory tree layout
+# and then sourcing them recursivly in a predefined order.
+# Suddenly it is possible to put process-logic into the directory structure
+# itself, meaning that changing the order or location of the script files,
+# changes the workflow as scripts are sourced in a different way. If-conditions
+# can even decide to either walk down the scripts in directory tree A or
+# directory tree B. Not only if-conditions, but also shell arguments could
+# manipulate the behaviour in which files are sourced in what order.
+#
+# Basically a workflow within the framework, is nothing more than a predefined
+# directory structure that the framework can source because it knows the
+# internal layout. Now assume we call one sub-directory conf/ and another one
+# we could call functions/ and another one doc/ and so on, and we have various
+# directory structures of exectly this type laying around side by side. We can
+# check if a directory with the name $1 exists and if so, recursivly source all
+# files in a sensefully predefined order inside that directory. That's pretty
+# much all the magic there is to it.
+#
+# Realizing the possibilities of this design-concept, the idea arose to write a
+# development framework, by adding plenty of useful helper functions and global
+# variables around the workflow before sourcing it, opening the possibility to
+# write small scripts by outsourcing all the repetative logic into the
+# outlaying framework. The framework provides an environment for the workflow
+# with tools and helpers for repetative tasks you would otherwise have to write
+# over and over.
+#
+# Severe parts of the design-concept have been adapted by Rear - Relax and
+# Recover.
+
 # Product and versioning information
-PRODUCT="Voodoo-Magic"
 PROGRAM="${0##*/}"
-VERSION="0.2.3"
-RELEASE_DATE="2012-06-08"
+PRODUCT="Voodoo-Magic"
+VERSION="rc-0.4.2"
+RELEASE_DATE="2012-06-23"
 
+# save command options
 CMD_OPTS=( "$@" )
-STARTTIME=$SECONDS
 
-BASEDIR="$(readlink -f ${0%/*/*/*})"
+if [[ "$0" == /* ]]; then
+    SCRIPT="$0"
+else
+    SCRIPT="$(which "$0")"
+fi
+BASEDIR="$(readlink -f ${SCRIPT%/*}/../../)"
 CONF_DIR="$BASEDIR/etc/$PROGRAM"
 LIB_DIR="$BASEDIR/usr/lib/$PROGRAM"
 SHARE_DIR="$BASEDIR/usr/share/$PROGRAM"
@@ -36,6 +81,7 @@ DOC_DIR="$BASEDIR/usr/share/doc/$PROGRAM"
 DEBUG=false
 DEBUGSCRIPTS=false
 SIMULATE=false
+VERBOSE=false
 
 EXIT_CODE=0
 
@@ -48,7 +94,8 @@ fi
 eval set -- "$OPTS"
 while true; do
     case $1 in
-        (-h|--help) WORKFLOW="help";;
+        (-h) WORKFLOW="help";;
+        (--help) WORKFLOW="help"; detailed=true;;
         (-V|--version) echo -e "$PRODUCT $VERSION / $RELEASE_DATE"; exit 0;;
         (-d) DEBUG=true;;
         (-D) DEBUGSCRIPTS=true;;
@@ -113,12 +160,11 @@ if ! has_binary pidof; then
 fi
 
 # do not run if another instance is running. pidof -x will always report at least $$
-SCRIPT_FILE="$(readlink -f $(get_path "$0" || echo "$0"))"
-PID=$(pidof -x -o %PPID "./usr/bin/voodoo-magic") || true
+PID=$(pidof -x -o %PPID "$0") || true
 if IsInArray "$WORKFLOW" "${LOCKLESS_WORKFLOWS[@]}"; then
     LOGFILE="$LOGFILE.lockless"
 elif [[ "$PID" ]] ; then
-    echo "ERROR: $SCRIPT_FILE is already running, not starting again" >&2
+    echo "ERROR: $SCRIPT is already running, not starting again" >&2
     exit 1
 fi
 
@@ -128,27 +174,11 @@ if [[ -r "$LOGFILE" ]]; then
 fi
 exec 2>"$LOGFILE" || echo "ERROR: Could not create $LOGFILE" >&2
 
-if ! IsInArray "$WORKFLOW" "${LOCKLESS_WORKFLOWS[@]}"; then
-    LogPrint "$PRODUCT $VERSION / $RELEASE_DATE starting up."
-    $SIMULATE && LogPrint "- SIMULATION MODE -"
-    Log "Command line options: $0 ${CMD_OPTS[@]}"
-fi
-
-# is this a verbose workflow?
-for workflow in "${ALWAYS_VERBOSE[@]}"; do
-    if [[ $WORKFLOW == $workflow ]]; then
-        VERBOSE=true
-        break
-    fi
-done
-
-v=""
-verbose=""
-# enable progress subsystem only in verbose mode, set some stuff that others can use
-if [[ "$VERBOSE" ]]; then
-    source $LIB_DIR/progresssubsystem.nosh
-    v="-v"
-    verbose="--verbose"
-fi
+Log "$PRODUCT $VERSION / $RELEASE_DATE starting up."
+Log "Command line options: $0 ${CMD_OPTS[@]}"
+$SIMULATE && LogPrint "- SIMULATION MODE -"
 
 StageWorkflow "$WORKFLOW"
+
+ENDTIME=$SECONDS
+Log "$PROGRAM finished after $ENDTIME second(s)."

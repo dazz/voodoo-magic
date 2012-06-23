@@ -16,37 +16,17 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+# the workflow can be passed as --name or $2 through the shell
 wf_name="${wf_name:-$2}"
 [[ -n "$wf_name" ]]
 StopIfError "No name specified"
 
+# define the workflow directory
 wf_dir="$WORKFLOW_DIR/$wf_name"
 [[ ! -d "$wf_dir" ]]
 StopIfError "Workflow already exists: $wf_dir"
 
-LogPrint "Creating new workflow: $wf_name"
-directories=( "$wf_dir" "$wf_dir/"{conf,doc,functions,tmp} )
-files=(
-    "$wf_dir/conf/$wf_name.conf"
-    "$wf_dir/doc/"{description,usage}
-    "$wf_dir/functions/00_general.sh"
-    "$wf_dir/workflow_$wf_name"
-)
-
-LogPrint "Creating workflow directories"
-for d in "${directories[@]}"; do
-    install -d "$d"
-done
-
-LogPrint "Creating workflow files"
-for f in "${files[@]}"; do
-    head -n 18 $0 > "$f"
-done
-
-LogPrint "Adding workflow function"
-echo "WORKFLOW_$wf_name() {
-    
-}
-" >> "$wf_dir/workflow_$wf_name"
-
+CreateWorkflowDirectories
+CreateWorkflowFiles
+AddWorkflowSkel
 LogPrint "Done."

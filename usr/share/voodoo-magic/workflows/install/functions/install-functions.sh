@@ -16,40 +16,56 @@
 #    with Voodoo-Magic; if not, write to the Free Software Foundation,
 #    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-SaveDirectoryTree() {
-    # save directory tree to be available when uninstalling
+SaveLayoutFile() {
+    # save file tree to be available when uninstalling
     filename="$WORKFLOW_DIR/$WORKFLOW/conf/install.dirs"
-    LogPrint "Saving directory structure: $filename"
+    LogPrint "Saving file and directory structure to: $filename"
 
+    IFS=$'\n' files=( $(
+        find "$BASEDIR" ! -regex '.*/\..*' -type f -printf '/%P\n' |\
+            grep -v "^/$"
+    ) )
     IFS=$'\n' directories=( $(
-        find "$BASEDIR" ! -regex '.*/\..*' -type d -printf '%P\n'
+        find "$BASEDIR" ! -regex '.*/\..*' -type d -printf '/%P\n' |\
+            grep "$PROGRAM" |\
+            grep -v "^/$"
     ) )
     (
-        cat <<EOF
-#!/bin/bash
+        cat <<-EOF
 # directories to be removed when uninstalling
-IFS=\$'\\n' INSTALL_DIRS=( $(
-    for dir in "${directories[@]}"; do
-        echo "$dir"
-    done
-)
-)
+IFS=\$'\\n' INSTALL_FILES=( $(
+                for f in "${files[@]}"; do
+                    echo "$f"
+                done
+            )
+        )
+
 EOF
     ) > "$filename"
+    (
+        cat <<-EOF
+IFS=\$'\\n' INSTALL_DIRS=( $(
+                for d in "${directories[@]}"; do
+                    echo "$d"
+                done
+            )
+        )
+
+EOF
+    ) >> "$filename"
 }
 
 Install() {
-    ExitIfNotRootUser
-    SaveDirectoryTree
-
     # array for file list
     IFS=$'\n' files=( $(
         find "$BASEDIR" ! -regex '.*/\..*' -type f -printf '%P\n'
     ) )
 
     # install file list to /
+    LogPrint "Installing files..."
     for file in "${files[@]}"; do
         install -D "$BASEDIR/$file" /"$file"
     done
+    LogPrint "Done"
 }
 

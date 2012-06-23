@@ -1,4 +1,0 @@
-Usage: helpers [ helper ]
-
-When no parameter is given, list all helper functions.
-When a helper is passed as parameter, print it to stdout.
